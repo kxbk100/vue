@@ -20,6 +20,11 @@ import type { SimpleSet } from '../util/index'
 let uid = 0
 
 /**
+ * 一个组件一个 watcher（渲染 watcher）或者一个表达式一个 watcher（用户watcher）
+ * 当数据更新时 watcher 会被触发，访问 this.computedProperty 时也会触发 watcher
+ */
+
+/**
  * A watcher parses an expression, collects dependencies,
  * and fires callback when the expression value changes.
  * This is used for both the $watch() api and directives.
@@ -80,6 +85,9 @@ export default class Watcher {
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn
     } else {
+      // this.getter = function() { return this.xx }
+      // 在 this.get 中执行 this.getter 时会触发依赖收集
+      // 待后续 this.xx 更新时就会触发响应式
       this.getter = parsePath(expOrFn)
       if (!this.getter) {
         this.getter = noop
