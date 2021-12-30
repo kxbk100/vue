@@ -1009,9 +1009,13 @@ Dep.prototype.depend = function depend () {
   }
 };
 
+/**
+ * 通知 dep 中的所有 watcher，执行 watcher.update() 方法
+ */
 Dep.prototype.notify = function notify () {
   // stabilize the subscriber list first
   var subs = this.subs.slice();
+  // 遍历 dep 中存储的 watcher，执行 watcher.update()
   for (var i = 0, l = subs.length; i < l; i++) {
     subs[i].update();
   }
